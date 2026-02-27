@@ -1,7 +1,8 @@
 
 import React, { useMemo } from 'react';
 import { Particle, Pattern, GamePhase } from '../types.ts';
-import { CONFIG } from '../constants.ts';
+import { CONFIG, PHASE_THEMES } from '../constants.ts';
+import { Zap, Magnet, Copy, RefreshCw } from 'lucide-react';
 
 interface GameBoardProps {
   particles: Particle[];
@@ -11,6 +12,7 @@ interface GameBoardProps {
 
 const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase }) => {
   const { cx: bCx, cy: bCy, r: bR } = CONFIG.BIO_WELL;
+  const theme = PHASE_THEMES[gamePhase as keyof typeof PHASE_THEMES] || PHASE_THEMES[1];
 
   // Calculamos la proporción de desorden (Entropía local)
   const disorderRatio = useMemo(() => {
@@ -38,7 +40,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
   const activePatterns = useMemo(() => {
     return patterns.map(pattern => {
       const pts = pattern.particleIds.map(id => particles.find(p => p.id === id)).filter(Boolean) as Particle[];
-      return { id: pattern.id, pts, color: pattern.color, type: pattern.type };
+      return { id: pattern.id, pts, color: pattern.color, type: pattern.type, role: pattern.role };
     }).filter(p => p.pts.length >= 3);
   }, [patterns, particles]);
 
@@ -61,7 +63,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
   const coreSaturation = 70 + (coreDensity * 30);
 
   return (
-    <div className="canvas-container shadow-2xl border-4 border-slate-900 relative overflow-hidden bg-slate-950 rounded-[2.5rem]">
+    <div className={`canvas-container shadow-2xl border-4 border-slate-900 relative overflow-hidden rounded-[2.5rem] transition-colors duration-1000 ${theme.bg}`}>
       {/* Capa de Calor Dinámico (Baño Térmico) */}
       <div 
         className="absolute inset-0 pointer-events-none z-0"
@@ -86,9 +88,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
           width: `${bR * 2}%`,
           height: `${bR * 2}%`,
           transform: 'translate(-50%, -50%)',
-          borderColor: `hsla(${coreHue}, ${coreSaturation}%, 60%, 0.8)`,
+          borderColor: theme.border || `hsla(${coreHue}, ${coreSaturation}%, 60%, 0.8)`,
           boxShadow: `0 0 ${20 + coreDensity * 40}px hsla(${coreHue}, 100%, 50%, ${0.2 * coreDensity})`,
-          background: `radial-gradient(circle, hsla(${coreHue}, 100%, 70%, ${coreOpacity}) 0%, transparent ${coreGlowSize}%)`,
+          background: theme.cell,
           backdropFilter: `blur(${1 + coreDensity}px)`
         }}
       >
@@ -104,7 +106,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
       <svg 
         viewBox="0 0 100 100" 
         preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible"
+        className="absolute inset-0 w-full h-full pointer-events-none z-40 overflow-visible"
       >
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
@@ -117,6 +119,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
           const baseColor = pattern.color || (pattern.type === 'TRI' ? '#f59e0b' : pattern.type === 'SQR' ? '#10b981' : '#8b5cf6');
           const points = pattern.pts.map(p => `${p.x},${p.y}`).join(' ');
           
+          const centerX = pattern.pts.reduce((acc, p) => acc + p.x, 0) / pattern.pts.length;
+          const centerY = pattern.pts.reduce((acc, p) => acc + p.y, 0) / pattern.pts.length;
+
           return (
             <g key={pattern.id}>
               {pattern.pts.map((pt, i) => {
@@ -142,6 +147,34 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
           );
         })}
       </svg>
+
+      {/* Capa de Iconos de Rol (HTML para evitar deformación por SVG stretching) */}
+      <div className="absolute inset-0 pointer-events-none z-50">
+        {activePatterns.map((pattern) => {
+          if (!pattern.role) return null;
+          const centerX = pattern.pts.reduce((acc, p) => acc + p.x, 0) / pattern.pts.length;
+          const centerY = pattern.pts.reduce((acc, p) => acc + p.y, 0) / pattern.pts.length;
+          
+          return (
+            <div 
+              key={`role-${pattern.id}`}
+              className="absolute flex items-center justify-center text-white/90 drop-shadow-md"
+              style={{
+                left: `${centerX}%`,
+                top: `${centerY}%`,
+                width: '1.2rem',
+                height: '1.2rem',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              {pattern.role === 'HARVESTER' && <Magnet className="w-full h-full" />}
+              {pattern.role === 'PRODUCER' && <Zap className="w-full h-full" />}
+              {pattern.role === 'REPLICATOR' && <Copy className="w-full h-full" />}
+              {pattern.role === 'RECYCLER' && <RefreshCw className="w-full h-full" />}
+            </div>
+          );
+        })}
+      </div>
 
       {/* Capa de Partículas Físicas */}
       <div className="absolute inset-0 z-30">
@@ -171,13 +204,16 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
             particleBorder = '#cbd5e1';
           }
           
+          const isPhase5 = gamePhase === GamePhase.SPECIALIZATION;
+          const size = isPhase5 ? 'w-1.5 h-1.5' : 'w-2 h-2';
+          
           return (
             <div
               key={p.id}
               className={`absolute rounded-full transition-all duration-500 ease-out border
                 ${p.state === 'ordered' 
-                  ? 'w-2 h-2 z-30 border-2' 
-                  : 'w-2 h-2 z-20 shadow-[0_0_4px_rgba(0,0,0,0.5)]'}`}
+                  ? `${size} z-30 border-2` 
+                  : `${size} z-20 shadow-[0_0_4px_rgba(0,0,0,0.5)]`}`}
               style={{
                 left: `${p.x}%`,
                 top: `${p.y}%`,

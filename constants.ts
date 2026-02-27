@@ -30,9 +30,9 @@ export const CONFIG = {
   
   // Nicho de Baja Entropía
   BIO_WELL: {
-    cx: 28, 
+    cx: 50, 
     cy: 50, 
-    r: 25   
+    r: 30   
   },
 
   // Evolution Multipliers
@@ -48,6 +48,20 @@ export const CONFIG = {
   PHASE4_CONVERSION_LIMIT: 8,      
   PHASE4_ENTROPY_PER_PATTERN: 50,  
   PHASE4_ENERGY_BONUS: 4.5,        
+  
+  // Phase 5
+  PHASE5_MAX_PATTERNS: 40,
+  PHASE5_GRID_COLS: 8,
+  PHASE5_GRID_ROWS: 5,
+  PHASE5_RADIUS_SCALE: 0.6,
+};
+
+export const PHASE_THEMES = {
+  1: { bg: 'bg-slate-950', cell: 'rgba(71, 85, 105, 0.2)', particle: '#94a3b8', border: '#475569' },
+  2: { bg: 'bg-indigo-950', cell: 'rgba(79, 70, 229, 0.2)', particle: '#818cf8', border: '#6366f1' },
+  3: { bg: 'bg-emerald-950', cell: 'rgba(16, 185, 129, 0.2)', particle: '#34d399', border: '#10b981' },
+  4: { bg: 'bg-purple-950', cell: 'rgba(139, 92, 246, 0.2)', particle: '#a78bfa', border: '#8b5cf6' },
+  5: { bg: 'bg-rose-950', cell: 'rgba(244, 63, 94, 0.2)', particle: '#fb7185', border: '#f43f5e' }
 };
 
 export const PHASE_COLORS = [
@@ -65,8 +79,10 @@ export const TRANSLATIONS = {
     guideTitle: "Guía del Investigador",
     lifelessUniverse: "Universo sin Vida",
     withLifeUniverse: "Universo con Vida",
+    voraciousUniverse: "Universo Voraz",
     lifelessDesc: "Observa cómo la entropía degrada el orden natural sin agentes que lo mantengan. Un sistema puramente pasivo.",
-    withLifeDesc: "Introduce flujos de energía y organismos capaces de mantener orden local a cambio de disipar calor global.",
+    withLifeDesc: "Introduce flujos de energía y organismos capaces de mantener orden local. Tú controlas las acciones del sistema.",
+    voraciousDesc: "La vida en su máxima expresión disipativa. El sistema se auto-mantiene y evoluciona automáticamente para devorar energía.",
     startSelect: "Selecciona el tipo de universo para iniciar",
     readGuide: "Leer Guía del Investigador",
     quote: "La vida no existe a pesar de la entropía; existe porque la entropía lo permite.",
@@ -75,6 +91,7 @@ export const TRANSLATIONS = {
     localOrder: "Orden Local",
     globalEntropy: "Entropía Global",
     autoMode: "AUTO-DISIPACIÓN",
+    autoAdvance: "AVANCE AUTO",
     runCycle: "EJECUTAR CICLO",
     collect: "RECOLECTAR",
     structure: "ESTRUCTURAR",
@@ -85,18 +102,38 @@ export const TRANSLATIONS = {
     results: "RESULTADOS",
     autoStrategy: "ESTRATEGIA TERMODINÁMICA VORAZ",
     noAgents: "SIN AGENTES ACTIVOS (SISTEMA PASIVO)",
-    objectiveTitle: "Tu Objetivo Actual",
-    objectiveDesc: "Maximiza la Entropía Global creando estructuras complejas.",
-    machineStatus: "Estado de la Máquina",
-    dissipationEngines: "Motores de Disipación",
-    formsDesc: "Las formas complejas queman el combustible universal mucho más rápido.",
-    logTitle: "Bitácora de Campo",
-    help: "Ayuda",
+    captureData: "CAPTURAR DATOS",
+    downloadData: "DESCARGAR CSV",
+    captureChart: "CAPTURAR GRÁFICA",
+    darkMode: "MODO OSCURO",
+    lightMode: "MODO CLARO",
+    dataCaptured: "Datos capturados para el informe",
+    objectiveTitle: "Qué hacer",
+    objectiveDesc: "Aumenta la energía y observa cómo sube la entropía.",
+    machineStatus: "Estado del Sistema",
+    dissipationEngines: "Entidades Activas",
+    formsDesc: "Las formas complejas consumen energía más rápido.",
+    logTitle: "Ayuda",
+    help: "Guía",
     triangles: "Triángulos",
     squares: "Cuadrados",
     pentagons: "Pentágonos",
-    lawTitle: "Ley Termodinámica",
-    lawDesc: '"El universo tiende al desorden. La vida no detiene este proceso; lo organiza para que ocurra más rápido."',
+    harvester: "Recolector",
+    harvesterDesc: "Atrae partículas lejanas al centro.",
+    producer: "Productor",
+    producerDesc: "Genera mucha más energía por ciclo.",
+    replicator: "Replicador",
+    replicatorDesc: "Reduce el costo de crear nuevos patrones.",
+    recycler: "Reciclador",
+    recyclerDesc: "Reduce el costo de reparación y mantenimiento.",
+    roleColors: {
+      HARVESTER: '#38bdf8', // Sky Blue
+      PRODUCER: '#fbbf24',  // Amber
+      REPLICATOR: '#fb7185', // Rose
+      RECYCLER: '#34d399'    // Emerald
+    },
+    lawTitle: "",
+    lawDesc: "",
     balanceTitle: "Balance Final",
     balanceSubtitle: "Resumen de la evolución disipativa",
     maxOrder: "Orden Max",
@@ -113,27 +150,33 @@ export const TRANSLATIONS = {
     phases: {
       1: {
         title: "Fase 1: Entropía Pasiva",
-        desc: "Sistema cerrado. El orden se degrada sin remedio en el nicho de estabilidad.",
-        rule: "Solo observa. Sin energía, el universo bosteza hacia el desorden.",
-        log: "La entropía pasiva es ineficiente. Necesitamos un motor de orden para acelerarla."
+        desc: "Solo observa cómo las partículas se desordenan solas.",
+        rule: "No puedes hacer nada, solo mirar el desorden natural.",
+        log: "Partículas libres: Se mueven al azar perdiendo el orden inicial."
       },
       2: {
         title: "Fase 2: Flujo y Reparación",
-        desc: "Sistema abierto. Introduces energía para forzar partículas al nicho de estabilidad.",
-        rule: "Gasta energía para ordenar. Nota que 'limpiar' tu casa calienta el universo.",
-        log: "Al forzar el orden, estamos 'comprando' entropía global con energía externa."
+        desc: "Usa el botón RECOLECTAR para ordenar partículas.",
+        rule: "Gasta energía para mover partículas al centro y ganar orden.",
+        log: "Partículas capturadas: Partículas que has forzado a entrar en el círculo central."
       },
       3: {
         title: "Fase 3: La Máquina Biológica",
-        desc: "Estructuras complejas se anclan en el núcleo ordenado para capturar energía.",
-        rule: "Estructura patrones. Son motores que devoran energía para no morir.",
-        log: "¡Éxito! La organización local permite quemar energía de forma sostenida."
+        desc: "Usa ESTRUCTURAR para crear triángulos permanentes.",
+        rule: "Crea triángulos para generar energía automáticamente cada ciclo.",
+        log: "Replicadores simples: Triángulos que mantienen el orden y generan energía."
       },
       4: {
         title: "Fase 4: Hiperciclos de Mutación",
-        desc: "Evolución forzada. Los patrones ahora pueden mutar a formas más complejas.",
-        rule: "Muta tus estructuras. Un pentágono es un motor térmico devastador.",
-        log: "La mutación compleja es el clímax térmico: estructuras que consumen todo a su alrededor."
+        desc: "Usa CLONAR y MUTAR para crear formas complejas.",
+        rule: "Crea cuadrados y pentágonos para disipar energía mucho más rápido.",
+        log: "Replicadores complejos: Cuadrados y pentágonos con mayor capacidad de disipación."
+      },
+      5: {
+        title: "Fase 5: Especialización Celular",
+        desc: "Crea una colonia con roles especializados.",
+        rule: "Observa cómo la división del trabajo baja los costos y maximiza la eficiencia.",
+        log: "Replicadores funcionales: Entidades con roles (Recolector, Productor, Replicador, Reciclador)."
       }
     }
   },
@@ -143,8 +186,10 @@ export const TRANSLATIONS = {
     guideTitle: "Researcher's Guide",
     lifelessUniverse: "Lifeless Universe",
     withLifeUniverse: "Universe with Life",
+    voraciousUniverse: "Voracious Universe",
     lifelessDesc: "Observe how entropy degrades natural order without agents to maintain it. A purely passive system.",
-    withLifeDesc: "Introduce energy flows and organisms capable of maintaining local order at the cost of dissipating global heat.",
+    withLifeDesc: "Introduce energy flows and organisms capable of maintaining local order. You control the system's actions.",
+    voraciousDesc: "Life at its maximum dissipative expression. The system self-maintains and evolves automatically to devour energy.",
     startSelect: "Select the type of universe to begin",
     readGuide: "Read Researcher's Guide",
     quote: "Life does not exist despite entropy; it exists because entropy allows it.",
@@ -153,6 +198,7 @@ export const TRANSLATIONS = {
     localOrder: "Local Order",
     globalEntropy: "Global Entropy",
     autoMode: "AUTO-DISSIPATION",
+    autoAdvance: "AUTO ADVANCE",
     runCycle: "EXECUTE CYCLE",
     collect: "COLLECT",
     structure: "STRUCTURE",
@@ -163,18 +209,38 @@ export const TRANSLATIONS = {
     results: "RESULTS",
     autoStrategy: "VORACIOUS THERMODYNAMIC STRATEGY",
     noAgents: "NO ACTIVE AGENTS (PASSIVE SYSTEM)",
-    objectiveTitle: "Your Current Objective",
-    objectiveDesc: "Maximize Global Entropy by creating complex structures.",
-    machineStatus: "Machine Status",
-    dissipationEngines: "Dissipation Engines",
-    formsDesc: "Complex forms burn universal fuel much faster.",
-    logTitle: "Field Log",
-    help: "Help",
+    captureData: "CAPTURE DATA",
+    downloadData: "DOWNLOAD CSV",
+    captureChart: "CAPTURE CHART",
+    darkMode: "DARK MODE",
+    lightMode: "LIGHT MODE",
+    dataCaptured: "Data captured for report",
+    objectiveTitle: "What to do",
+    objectiveDesc: "Increase energy and observe how entropy rises.",
+    machineStatus: "System Status",
+    dissipationEngines: "Active Entities",
+    formsDesc: "Complex forms consume energy faster.",
+    logTitle: "Help",
+    help: "Guide",
     triangles: "Triangles",
     squares: "Squares",
     pentagons: "Pentagons",
-    lawTitle: "Thermodynamic Law",
-    lawDesc: '"The universe tends toward disorder. Life doesn\'t stop this process; it organizes it to happen faster."',
+    harvester: "Harvester",
+    harvesterDesc: "Attracts distant particles to the center.",
+    producer: "Producer",
+    producerDesc: "Generates much more energy per cycle.",
+    replicator: "Replicator",
+    replicatorDesc: "Reduces the cost of creating new patterns.",
+    recycler: "Recycler",
+    recyclerDesc: "Reduces repair and maintenance costs.",
+    roleColors: {
+      HARVESTER: '#38bdf8',
+      PRODUCER: '#fbbf24',
+      REPLICATOR: '#fb7185',
+      RECYCLER: '#34d399'
+    },
+    lawTitle: "",
+    lawDesc: "",
     balanceTitle: "Final Balance",
     balanceSubtitle: "Summary of dissipative evolution",
     maxOrder: "Max Order",
@@ -191,27 +257,33 @@ export const TRANSLATIONS = {
     phases: {
       1: {
         title: "Phase 1: Passive Entropy",
-        desc: "Closed system. Order inevitably degrades in the stability niche.",
-        rule: "Just observe. Without energy, the universe yawns toward disorder.",
-        log: "Passive entropy is inefficient. We need an order engine to accelerate it."
+        desc: "Just observe how particles disorder themselves.",
+        rule: "You can't do anything, just watch the natural disorder.",
+        log: "Free particles: Moving randomly losing initial order."
       },
       2: {
         title: "Phase 2: Flow and Repair",
-        desc: "Open system. You introduce energy to force particles into the stability niche.",
-        rule: "Spend energy to order. Note that 'cleaning' your house heats up the universe.",
-        log: "By forcing order, we are 'buying' global entropy with external energy."
+        desc: "Use COLLECT button to order particles.",
+        rule: "Spend energy to move particles to the center and gain order.",
+        log: "Captured particles: Particles you've forced into the central circle."
       },
       3: {
         title: "Phase 3: The Biological Machine",
-        desc: "Complex structures anchor in the ordered core to capture energy.",
-        rule: "Structure patterns. They are engines that devour energy to survive.",
-        log: "Success! Local organization allows for sustained energy burning."
+        desc: "Use STRUCTURE to create permanent triangles.",
+        rule: "Create triangles to generate energy automatically each cycle.",
+        log: "Simple replicators: Triangles that maintain order and generate energy."
       },
       4: {
         title: "Phase 4: Mutation Hypercycles",
-        desc: "Forced evolution. Patterns can now mutate into more complex forms.",
-        rule: "Mutate your structures. A pentagon is a devastating thermal engine.",
-        log: "Complex mutation is the thermal climax: structures consuming everything around them."
+        desc: "Use CLONE and MUTATE to create complex forms.",
+        rule: "Create squares and pentagons to dissipate energy much faster.",
+        log: "Complex replicators: Squares and pentagons with higher dissipation capacity."
+      },
+      5: {
+        title: "Phase 5: Cellular Specialization",
+        desc: "Create a colony with specialized roles.",
+        rule: "Observe how division of labor lowers costs and maximizes efficiency.",
+        log: "Functional replicators: Entities with roles (Harvester, Producer, Replicator, Recycler)."
       }
     }
   }

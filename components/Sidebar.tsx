@@ -6,11 +6,9 @@ import { TRANSLATIONS } from '../constants.ts';
 interface SidebarProps {
   state: AppState;
   onOpenDocs: () => void;
-  onToggleLanguage: () => void;
-  onToggleTheme: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ state, onOpenDocs, onToggleLanguage, onToggleTheme }) => {
+const Sidebar: React.FC<SidebarProps> = ({ state, onOpenDocs }) => {
   const t = TRANSLATIONS[state.language];
   const phaseInfo = t.phases[state.gamePhase];
   
@@ -22,92 +20,92 @@ const Sidebar: React.FC<SidebarProps> = ({ state, onOpenDocs, onToggleLanguage, 
   const pntCount = state.patterns.filter(p => p.type === 'PNT').length;
 
   return (
-    <aside className="w-full md:w-80 flex flex-col gap-4">
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 flex-1 overflow-y-auto">
-        <h3 className="font-black text-gray-400 dark:text-slate-500 text-[10px] uppercase tracking-widest mb-4">{t.machineStatus}</h3>
+    <aside className="w-full md:w-72 lg:w-80 flex flex-col gap-2 md:gap-4 shrink-0">
+      <div className={`p-4 md:p-6 rounded-2xl shadow-sm border flex-1 overflow-y-auto transition-colors duration-500 ${state.isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'}`}>
+        <h3 className="font-black text-slate-500 text-[8px] md:text-[10px] uppercase tracking-widest mb-2 md:mb-4">{t.machineStatus}</h3>
         
-        <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-xl border border-red-100 dark:border-red-900/50 mb-6">
-          <p className="text-xs font-bold text-red-800 dark:text-red-400 uppercase mb-1">{t.objectiveTitle}</p>
-          <p className="text-sm text-red-900 dark:text-red-200 font-medium">{t.objectiveDesc}</p>
+        <div className={`p-3 md:p-4 rounded-xl border mb-4 md:mb-6 ${state.isDarkMode ? 'bg-red-950/20 border-red-900/30' : 'bg-red-50 border-red-100'}`}>
+          <p className={`text-[10px] md:text-xs font-bold uppercase mb-0.5 md:mb-1 ${state.isDarkMode ? 'text-red-400' : 'text-red-800'}`}>{t.objectiveTitle}</p>
+          <p className={`text-xs md:text-sm font-medium ${state.isDarkMode ? 'text-red-200' : 'text-red-900'}`}>{t.objectiveDesc}</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
-            <div className="flex justify-between text-xs mb-2">
-              <span className="text-gray-500 dark:text-slate-400 font-bold uppercase">{t.localOrder}</span>
-              <span className="font-mono text-indigo-600 dark:text-indigo-400 font-black">{localOrderPercent.toFixed(1)}%</span>
+            <div className="flex justify-between text-[10px] md:text-xs mb-1 md:mb-2">
+              <span className="text-slate-500 font-bold uppercase">{t.localOrder}</span>
+              <span className="font-mono text-indigo-400 font-black">{localOrderPercent.toFixed(1)}%</span>
             </div>
-            <div className="h-3 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700">
+            <div className={`h-2 md:h-3 rounded-full overflow-hidden border ${state.isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-gray-100 border-gray-200'}`}>
               <div 
                 className="h-full bg-indigo-500 transition-all duration-700" 
                 style={{ width: `${localOrderPercent}%` }}
               />
             </div>
+            <p className="text-[9px] md:text-[10px] mt-2 text-slate-500 font-medium leading-tight">
+              {phaseInfo.log}
+            </p>
           </div>
 
           {state.gamePhase >= GamePhase.PERSISTENT_PATTERNS && (
-            <div className="p-4 bg-slate-900 text-white rounded-2xl shadow-xl space-y-3">
-              <p className="text-[10px] font-bold uppercase text-indigo-300 mb-1">{t.dissipationEngines}</p>
+            <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl shadow-xl space-y-2 md:space-y-3 ${state.isDarkMode ? 'bg-slate-800' : 'bg-slate-900 text-white'}`}>
+              <p className={`text-[8px] md:text-[10px] font-bold uppercase mb-0.5 md:mb-1 ${state.isDarkMode ? 'text-indigo-400' : 'text-indigo-300'}`}>{t.dissipationEngines}</p>
               
-              <div className="flex justify-between items-center text-xs border-b border-white/10 pb-2">
-                <span className="flex items-center gap-2"><div className="w-2 h-2 bg-amber-500 rounded-sm"></div> {t.triangles}</span>
-                <span className="font-black">{triCount}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs border-b border-white/10 pb-2">
-                <span className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-sm"></div> {t.squares}</span>
-                <span className="font-black">{sqrCount}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="flex items-center gap-2"><div className="w-2 h-2 bg-purple-500 rounded-sm"></div> {t.pentagons}</span>
-                <span className="font-black">{pntCount}</span>
-              </div>
-
-              <p className="text-[10px] mt-2 text-indigo-200 leading-tight">{t.formsDesc}</p>
+              {state.gamePhase < GamePhase.SPECIALIZATION ? (
+                <>
+                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-white/10'}`}>
+                    <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-amber-500 rounded-sm"></div> {t.triangles}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{triCount}</span>
+                  </div>
+                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-white/10'}`}>
+                    <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-500 rounded-sm"></div> {t.squares}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{sqrCount}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[10px] md:text-xs">
+                    <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-500 rounded-sm"></div> {t.pentagons}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{pntCount}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  {[
+                    { id: 'HARVESTER', label: t.harvester, desc: t.harvesterDesc, count: state.patterns.filter(p => p.role === 'HARVESTER').length },
+                    { id: 'PRODUCER', label: t.producer, desc: t.producerDesc, count: state.patterns.filter(p => p.role === 'PRODUCER').length },
+                    { id: 'REPLICATOR', label: t.replicator, desc: t.replicatorDesc, count: state.patterns.filter(p => p.role === 'REPLICATOR').length },
+                    { id: 'RECYCLER', label: t.recycler, desc: t.recyclerDesc, count: state.patterns.filter(p => p.role === 'RECYCLER').length },
+                  ].map(role => (
+                    <div key={role.id} className="space-y-1">
+                      <div className="flex justify-between items-center text-[10px] md:text-xs">
+                        <span className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: t.roleColors[role.id] }}></div>
+                          <span className="font-bold">{role.label}</span>
+                        </span>
+                        <span className="font-black">{role.count}</span>
+                      </div>
+                      <p className="text-[8px] md:text-[9px] opacity-60 leading-tight pl-4">
+                        {role.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex justify-between items-center mb-3">
-            <h4 className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest">{t.logTitle}</h4>
-            <div className="flex gap-2">
-              <button 
-                onClick={onToggleTheme}
-                className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-400"
-                title={state.theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-              >
-                {state.theme === 'light' ? (
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                ) : (
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.95 16.95l.707.707M7.05 7.05l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>
-                )}
-              </button>
-              <button 
-                onClick={onToggleLanguage}
-                className="text-[10px] font-bold text-slate-400 uppercase hover:text-indigo-600 transition-colors"
-              >
-                {state.language === 'es' ? 'EN' : 'ES'}
-              </button>
-              <button 
-                onClick={onOpenDocs}
-                className="text-[10px] font-bold text-indigo-600 uppercase hover:underline"
-              >
-                {t.help}
-              </button>
-            </div>
+        <div className={`mt-4 md:mt-8 pt-4 md:pt-6 border-t ${state.isDarkMode ? 'border-slate-800' : 'border-slate-100'}`}>
+          <div className="flex justify-between items-center mb-2 md:mb-3">
+            <h4 className="text-[8px] md:text-[10px] font-black uppercase text-slate-500 tracking-widest">{t.logTitle}</h4>
+            <button 
+              onClick={onOpenDocs}
+              className="text-[8px] md:text-[10px] font-bold text-indigo-500 uppercase hover:underline"
+            >
+              {t.help}
+            </button>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed italic">
-            {phaseInfo.log}
+          <p className={`text-[10px] md:text-xs leading-relaxed italic ${state.isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+            {phaseInfo.desc}
           </p>
         </div>
-      </div>
-
-      <div className="bg-indigo-950 p-6 rounded-2xl text-white shadow-2xl relative overflow-hidden group">
-        <div className="absolute -top-4 -right-4 w-16 h-16 bg-white/5 rounded-full group-hover:scale-150 transition-transform"></div>
-        <h4 className="text-[10px] font-black uppercase text-indigo-400 mb-2 tracking-widest">{t.lawTitle}</h4>
-        <p className="text-xs leading-relaxed font-medium">
-          {t.lawDesc}
-        </p>
       </div>
     </aside>
   );
