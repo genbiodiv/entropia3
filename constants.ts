@@ -298,7 +298,20 @@ export const GUIDE_CONTENT = {
   es: `
 # ENTROPIA + VIDA: Guía del Investigador
 
-Este simulador te permite explorar cómo la vida usa la energía para crear orden. Tu objetivo es **aumentar la energía** del sistema y observar cómo, al hacerlo, la **entropía (desorden global)** sube inevitablemente.
+Esta simulación tiene como objetivo comparar la dinámica entre la **vida** y la **entropía** a través de tres universos paralelos. Aunque existen ligeras diferencias técnicas en cada uno, lo fundamental es observar la relación entre el **orden local**, la **entropía global** y cómo evolucionan los procesos.
+
+---
+
+## 🌌 Los Tres Universos Paralelos
+
+1.  **Universo sin Vida:** En este escenario, la vida nunca aparece. Es un sistema pasivo donde puedes observar cómo el orden inicial se degrada inevitablemente hacia el desorden total (entropía máxima) sin ninguna fuerza que lo contrarreste.
+2.  **Universo con Vida:** Aquí, **tú decides** cómo y cuándo aparece la vida. Tienes el control sobre las acciones del sistema (recolectar, estructurar, clonar, mutar) para intentar mantener focos de orden local frente al avance de la entropía.
+3.  **Universo Voraz:** En este tercer universo, **el sistema decide** automáticamente cómo aparece y evoluciona la vida. Es una simulación de "auto-disipación" donde la vida actúa como un catalizador eficiente para consumir energía y generar entropía a gran escala.
+
+---
+
+## ⏱️ Configuración de Ciclos
+Tienes la opción de elegir entre **ciclos cortos (10), medios (20) o largos (30)** para cada fase. Esto te permite observar los procesos con diferentes niveles de detalle y duración temporal, afectando la acumulación total de entropía y la estabilidad de las estructuras.
 
 ---
 
@@ -326,16 +339,31 @@ Este simulador te permite explorar cómo la vida usa la energía para crear orde
 
 ---
 
-## 🔥 Modo Voraz (IA)
-Si activas el modo **AUTO-DISIPACIÓN**, la máquina tomará las decisiones por ti. Observa cómo la IA prioriza expandirse y evolucionar para consumir toda la energía disponible, acelerando el fin térmico del universo.
+## 📊 Conclusiones del Investigador
+Al final de la simulación, es fundamental que revises los datos consolidados y saques tus propias conclusiones:
+*   **¿Qué pasa con el orden?** ¿Es posible mantenerlo indefinidamente?
+*   **¿Qué pasa con la entropía?** ¿Cómo afecta la presencia de vida a la velocidad de disipación global?
+*   **Comparativa:** ¿Cuál de los tres universos resultó ser más "eficiente" en términos de consumo energético?
 
-## 📊 Datos y Resultados
-Al terminar, podrás capturar tus datos y descargar un archivo CSV. Recuerda que solo puedes capturar los datos **una vez** por simulación.
+Recuerda que puedes descargar los datos en formato CSV para un análisis más profundo.
 `,
   en: `
 # ENTROPY + LIFE: Researcher's Guide
 
-This simulator allows you to explore how life uses energy to create order. Your goal is to **increase the energy** of the system and observe how, in doing so, **entropy (global disorder)** inevitably rises.
+This simulation aims to compare the dynamics between **life** and **entropy** across three parallel universes. Although there are slight technical differences in each, the fundamental goal is to observe the relationship between **local order**, **global entropy**, and how processes evolve.
+
+---
+
+## 🌌 The Three Parallel Universes
+
+1.  **Lifeless Universe:** In this scenario, life never appears. It is a passive system where you can observe how initial order inevitably degrades toward total disorder (maximum entropy) without any counteracting force.
+2.  **Universe with Life:** Here, **you decide** how and when life appears. You have control over the system's actions (collect, structure, clone, mutate) to try to maintain pockets of local order against the advance of entropy.
+3.  **Voracious Universe:** In this third universe, **the system automatically decides** how life appears and evolves. It is a "self-dissipation" simulation where life acts as an efficient catalyst to consume energy and generate large-scale entropy.
+
+---
+
+## ⏱️ Cycle Configuration
+You have the option to choose between **short (10), medium (20), or long (30) cycles** for each phase. This allows you to observe processes with different levels of detail and temporal duration, affecting total entropy accumulation and structure stability.
 
 ---
 
@@ -363,10 +391,12 @@ This simulator allows you to explore how life uses energy to create order. Your 
 
 ---
 
-## 🔥 Voracious Mode (AI)
-If you activate **AUTO-DISSIPATION** mode, the machine will make decisions for you. Observe how the AI prioritizes expanding and evolving to consume all available energy, accelerating the heat death of the universe.
+## 📊 Researcher's Conclusions
+At the end of the simulation, it is essential that you review the consolidated data and draw your own conclusions:
+*   **What happens to order?** Is it possible to maintain it indefinitely?
+*   **What happens to entropy?** How does the presence of life affect the rate of global dissipation?
+*   **Comparison:** Which of the three universes proved to be more "efficient" in terms of energy consumption?
 
-## 📊 Data and Results
-When finished, you can capture your data and download a CSV file. Remember that you can only capture data **once** per simulation.
+Remember that you can download the data in CSV format for deeper analysis.
 `
 };

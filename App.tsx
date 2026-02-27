@@ -476,7 +476,7 @@ const App: React.FC = () => {
 
   const advanceRound = useCallback(() => {
     setState(prev => {
-      if (prev.round >= CONFIG.MAX_ROUNDS_PER_PHASE) return prev;
+      if (prev.round >= prev.maxRoundsPerPhase) return prev;
 
       let nextParticles = prev.particles.map(p => {
         const isPattern = !!p.patternId;
@@ -712,7 +712,7 @@ const App: React.FC = () => {
           <div className="hidden md:block">
             <h1 className="text-xl font-black uppercase tracking-tighter leading-none">{t.title}</h1>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
-              {t.phases[state.gamePhase].title} • {t.cycle} {state.round}/{CONFIG.MAX_ROUNDS_PER_PHASE}
+              {t.phases[state.gamePhase].title} • {t.cycle} {state.round}/{state.maxRoundsPerPhase}
             </p>
           </div>
         </div>
