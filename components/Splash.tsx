@@ -64,22 +64,22 @@ const Splash: React.FC<SplashProps> = ({ state, onStart, onOpenDocs, onToggleLan
               onClick={() => onStart('lifeless', cycles)}
               className={`group p-4 border-2 rounded-xl text-left transition-all hover:shadow-lg flex flex-col ${state.isDarkMode ? 'bg-slate-800 border-slate-700 hover:border-slate-500' : 'bg-white border-slate-200 hover:border-slate-400'}`}
             >
-              <h3 className={`font-black text-[10px] md:text-xs mb-1 uppercase group-hover:text-indigo-400 ${state.isDarkMode ? 'text-slate-300' : 'text-slate-800'}`}>{t.lifelessUniverse}</h3>
-              <p className="text-[9px] md:text-[10px] text-slate-500 leading-normal flex-1">{t.lifelessDesc}</p>
+              <h3 className={`font-black text-xs md:text-sm mb-1 uppercase group-hover:text-indigo-400 ${state.isDarkMode ? 'text-slate-300' : 'text-slate-800'}`}>{t.lifelessUniverse}</h3>
+              <p className="text-[10px] md:text-xs text-slate-500 leading-normal flex-1">{t.lifelessDesc}</p>
             </button>
             <button 
               onClick={() => onStart('with-life', cycles)}
               className={`group p-4 border-2 rounded-xl text-left transition-all hover:shadow-lg flex flex-col ${state.isDarkMode ? 'bg-slate-800 border-indigo-900 hover:border-indigo-500' : 'bg-white border-indigo-200 hover:border-indigo-500'}`}
             >
-              <h3 className={`font-black text-[10px] md:text-xs mb-1 uppercase group-hover:text-indigo-400 ${state.isDarkMode ? 'text-indigo-400' : 'text-indigo-700'}`}>{t.withLifeUniverse}</h3>
-              <p className="text-[9px] md:text-[10px] text-slate-500 leading-normal flex-1">{t.withLifeDesc}</p>
+              <h3 className={`font-black text-xs md:text-sm mb-1 uppercase group-hover:text-indigo-400 ${state.isDarkMode ? 'text-indigo-400' : 'text-indigo-700'}`}>{t.withLifeUniverse}</h3>
+              <p className="text-[10px] md:text-xs text-slate-500 leading-normal flex-1">{t.withLifeDesc}</p>
             </button>
             <button 
               onClick={() => onStart('voracious', cycles)}
               className={`group p-4 border-2 rounded-xl text-left transition-all hover:shadow-lg flex flex-col ${state.isDarkMode ? 'bg-slate-800 border-red-900 hover:border-red-500' : 'bg-white border-red-200 hover:border-red-500'}`}
             >
-              <h3 className={`font-black text-[10px] md:text-xs mb-1 uppercase group-hover:text-red-400 ${state.isDarkMode ? 'text-red-400' : 'text-red-700'}`}>{t.voraciousUniverse}</h3>
-              <p className="text-[9px] md:text-[10px] text-slate-500 leading-normal flex-1">{t.voraciousDesc}</p>
+              <h3 className={`font-black text-xs md:text-sm mb-1 uppercase group-hover:text-red-400 ${state.isDarkMode ? 'text-red-400' : 'text-red-700'}`}>{t.voraciousUniverse}</h3>
+              <p className="text-[10px] md:text-xs text-slate-500 leading-normal flex-1">{t.voraciousDesc}</p>
             </button>
           </div>
         </div>
