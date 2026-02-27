@@ -40,7 +40,7 @@ const generateInitialParticles = (): Particle[] => {
   return particles;
 };
 
-const getInitialState = (lang: Language = 'es'): AppState => ({
+const getInitialState = (lang: Language = 'es', cycles: number = 20): AppState => ({
   currentPhase: Phase.START,
   gamePhase: GamePhase.CLOSED_SYSTEM,
   universeType: 'with-life',
@@ -53,10 +53,10 @@ const getInitialState = (lang: Language = 'es'): AppState => ({
   phaseSummaries: [],
   maxOrderReached: 0,
   isAutoMode: false,
-  isAutoAdvance: false,
   language: lang,
   isDarkMode: true,
-  capturedData: []
+  capturedData: [],
+  maxRoundsPerPhase: cycles
 });
 
 const formatValue = (val: number) => {
@@ -79,7 +79,7 @@ const App: React.FC = () => {
   const [celebration, setCelebration] = useState<string | null>(null);
   const [reachedMilestones, setReachedMilestones] = useState<number[]>([]);
 
-  const isPhaseComplete = state.round >= CONFIG.MAX_ROUNDS_PER_PHASE;
+  const isPhaseComplete = state.round >= state.maxRoundsPerPhase;
   const t = TRANSLATIONS[state.language];
   const phaseInfo = t.phases[state.gamePhase];
 
@@ -105,8 +105,8 @@ const App: React.FC = () => {
   }, [state.globalEntropy, state.particles, reachedMilestones]);
 
   const resetGame = useCallback(() => {
-    setState(getInitialState(state.language));
-  }, [state.language]);
+    setState(getInitialState(state.language, state.maxRoundsPerPhase));
+  }, [state.language, state.maxRoundsPerPhase]);
 
   const toggleLanguage = () => {
     setState(prev => ({ ...prev, language: prev.language === 'es' ? 'en' : 'es' }));
@@ -186,12 +186,13 @@ const App: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const startGame = (type: UniverseType) => {
+  const startGame = (type: UniverseType, cycles: number) => {
     setState(prev => ({
       ...prev,
       universeType: type,
       isAutoMode: type === 'voracious',
-      currentPhase: Phase.SIMULATION
+      currentPhase: Phase.SIMULATION,
+      maxRoundsPerPhase: cycles
     }));
   };
 
@@ -621,27 +622,6 @@ const App: React.FC = () => {
       .catch(err => console.error("Error loading README:", err));
   }, []);
 
-  // Auto-Advance Logic
-  useEffect(() => {
-    let interval: any;
-    if (state.currentPhase === Phase.SIMULATION && state.isAutoAdvance && !isPhaseComplete) {
-      interval = setInterval(() => {
-        // Only advance if no actions are possible
-        const canRepair = state.energy >= getRepairCost(state) && state.particles.some(p => p.state === 'disordered');
-        const canOrganize = state.energy >= getOrganizeCost(state) && getNextFreeSlot(state.patterns, state.gamePhase) !== -1 && state.particles.filter(p => p.state === 'ordered' && !p.patternId).length >= 3;
-        const canCopy = state.energy >= getCopyCost(state) && getNextFreeSlot(state.patterns, state.gamePhase) !== -1;
-        const canEvolve = state.energy >= getEvolveCost(state) && state.patterns.some(p => p.type !== 'PNT') && state.particles.some(p => p.state === 'ordered' && !p.patternId);
-        
-        const canDoAnything = state.universeType !== 'lifeless' && (canRepair || canOrganize || canCopy || canEvolve);
-        
-        if (!canDoAnything) {
-          advanceRound();
-        }
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [state.currentPhase, state.isAutoAdvance, isPhaseComplete, advanceRound, state.energy, state.particles, state.patterns, state.gamePhase, state.universeType]);
-
   // Voracious Mode Enforcement
   useEffect(() => {
     if (state.universeType === 'voracious' && !state.isAutoMode) {
@@ -815,25 +795,15 @@ const App: React.FC = () => {
                       className={`h-12 px-5 rounded-xl font-black transition-all flex items-center justify-center gap-2 shadow-md active:scale-95 text-xs whitespace-nowrap ${state.isDarkMode ? 'bg-slate-100 text-slate-900' : 'bg-slate-900 text-white'}`}
                     >
                       <RefreshCw className="w-4 h-4" />
-                      {t.runCycle} (L{state.gamePhase} • {state.round}/{CONFIG.MAX_ROUNDS_PER_PHASE})
+                      {t.runCycle} (L{state.gamePhase} • {state.round}/{state.maxRoundsPerPhase})
                     </button>
-
-                    {(state.universeType === 'lifeless' || state.universeType === 'voracious') && (
-                      <button 
-                        onClick={() => setState(p => ({ ...p, isAutoAdvance: !p.isAutoAdvance }))}
-                        className={`h-12 px-5 rounded-xl font-black transition-all flex items-center justify-center gap-2 shadow-md active:scale-95 text-xs whitespace-nowrap border-2 ${state.isAutoAdvance ? 'bg-indigo-600 border-indigo-400 text-white animate-pulse' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
-                      >
-                        <RefreshCw className={`w-4 h-4 ${state.isAutoAdvance ? 'animate-spin' : ''}`} />
-                        {t.autoAdvance}
-                      </button>
-                    )}
                   </div>
                 ) : (
                   <button 
                     onClick={handlePhaseTransition}
                     className="h-12 px-6 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition-all shadow-xl animate-pulse active:scale-95 text-xs flex items-center gap-2 whitespace-nowrap"
                   >
-                    {state.gamePhase === GamePhase.REPRODUCTION ? t.results : t.nextPhase}
+                    {state.gamePhase === GamePhase.SPECIALIZATION ? t.finishSimulation : (state.gamePhase === GamePhase.REPRODUCTION ? t.results : t.nextPhase)}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 )}
@@ -927,7 +897,7 @@ const App: React.FC = () => {
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l18 18" /></svg>
               </button>
             </header>
-            <div className={`flex-1 overflow-y-auto p-8 md:p-12 prose max-w-none ${state.isDarkMode ? 'prose-invert' : ''}`}>
+            <div className={`flex-1 overflow-y-auto p-8 md:p-12 prose max-w-none select-text ${state.isDarkMode ? 'prose-invert' : ''}`}>
               <div dangerouslySetInnerHTML={{ __html: marked.parse(readmeContent || (state.language === 'es' ? 'Cargando guía...' : 'Loading guide...')) }} />
             </div>
             <footer className={`px-8 py-6 border-t ${state.isDarkMode ? 'border-slate-800' : 'border-slate-100'} text-center`}>

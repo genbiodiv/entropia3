@@ -90,4 +90,5 @@ export interface AppState {
   language: Language;
   isDarkMode: boolean;
   capturedData: CapturedSnapshot[];
+  maxRoundsPerPhase: number;
 }

@@ -74,7 +74,7 @@ export const PHASE_COLORS = [
 
 export const TRANSLATIONS = {
   es: {
-    title: "Orden, Entropía y Persistencia",
+    title: "ENTROPIA + VIDA",
     subtitle: "Un viaje interactivo desde el colapso inevitable de un sistema cerrado hasta la emergencia de estructuras auto-mantenidas.",
     guideTitle: "Guía del Investigador",
     lifelessUniverse: "Universo sin Vida",
@@ -84,6 +84,7 @@ export const TRANSLATIONS = {
     withLifeDesc: "Introduce flujos de energía y organismos capaces de mantener orden local. Tú controlas las acciones del sistema.",
     voraciousDesc: "La vida en su máxima expresión disipativa. El sistema se auto-mantiene y evoluciona automáticamente para devorar energía.",
     startSelect: "Selecciona el tipo de universo para iniciar",
+    cyclesPerLevel: "Ciclos por nivel",
     readGuide: "Leer Guía del Investigador",
     quote: "La vida no existe a pesar de la entropía; existe porque la entropía lo permite.",
     cycle: "Ciclo",
@@ -91,7 +92,6 @@ export const TRANSLATIONS = {
     localOrder: "Orden Local",
     globalEntropy: "Entropía Global",
     autoMode: "AUTO-DISIPACIÓN",
-    autoAdvance: "AVANCE AUTO",
     runCycle: "EJECUTAR CICLO",
     collect: "RECOLECTAR",
     structure: "ESTRUCTURAR",
@@ -99,6 +99,7 @@ export const TRANSLATIONS = {
     mutate: "MUTAR",
     energyFlow: "Flujo de Energía",
     nextPhase: "SIGUIENTE FASE",
+    finishSimulation: "Terminar Simulación",
     results: "RESULTADOS",
     autoStrategy: "ESTRATEGIA TERMODINÁMICA VORAZ",
     noAgents: "SIN AGENTES ACTIVOS (SISTEMA PASIVO)",
@@ -181,7 +182,7 @@ export const TRANSLATIONS = {
     }
   },
   en: {
-    title: "Order, Entropy, and Persistence",
+    title: "ENTROPY + LIFE",
     subtitle: "An interactive journey from the inevitable collapse of a closed system to the emergence of self-sustaining structures.",
     guideTitle: "Researcher's Guide",
     lifelessUniverse: "Lifeless Universe",
@@ -191,6 +192,7 @@ export const TRANSLATIONS = {
     withLifeDesc: "Introduce energy flows and organisms capable of maintaining local order. You control the system's actions.",
     voraciousDesc: "Life at its maximum dissipative expression. The system self-maintains and evolves automatically to devour energy.",
     startSelect: "Select the type of universe to begin",
+    cyclesPerLevel: "Cycles per level",
     readGuide: "Read Researcher's Guide",
     quote: "Life does not exist despite entropy; it exists because entropy allows it.",
     cycle: "Cycle",
@@ -198,7 +200,6 @@ export const TRANSLATIONS = {
     localOrder: "Local Order",
     globalEntropy: "Global Entropy",
     autoMode: "AUTO-DISSIPATION",
-    autoAdvance: "AUTO ADVANCE",
     runCycle: "EXECUTE CYCLE",
     collect: "COLLECT",
     structure: "STRUCTURE",
@@ -206,6 +207,7 @@ export const TRANSLATIONS = {
     mutate: "MUTATE",
     energyFlow: "Energy Flow",
     nextPhase: "NEXT PHASE",
+    finishSimulation: "Finish Simulation",
     results: "RESULTS",
     autoStrategy: "VORACIOUS THERMODYNAMIC STRATEGY",
     noAgents: "NO ACTIVE AGENTS (PASSIVE SYSTEM)",
