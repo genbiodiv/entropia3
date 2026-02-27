@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Phase, GamePhase, AppState, Particle, HistoryPoint, Pattern, PhaseSummary, UniverseType, PatternType, Language, CapturedSnapshot } from './types.ts';
-import { CONFIG, TRANSLATIONS, PHASE_COLORS } from './constants.ts';
+import { CONFIG, TRANSLATIONS, PHASE_COLORS, GUIDE_CONTENT } from './constants.ts';
 import GameBoard from './components/GameBoard.tsx';
 import Sidebar from './components/Sidebar.tsx';
 import Splash from './components/Splash.tsx';
@@ -616,11 +616,8 @@ const App: React.FC = () => {
   // --- Effects ---
 
   useEffect(() => {
-    fetch('README.md')
-      .then(res => res.text())
-      .then(text => setReadmeContent(text))
-      .catch(err => console.error("Error loading README:", err));
-  }, []);
+    setReadmeContent(GUIDE_CONTENT[state.language]);
+  }, [state.language]);
 
   // Voracious Mode Enforcement
   useEffect(() => {
