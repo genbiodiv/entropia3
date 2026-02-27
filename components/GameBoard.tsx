@@ -8,9 +8,10 @@ interface GameBoardProps {
   particles: Particle[];
   patterns: Pattern[];
   gamePhase: GamePhase;
+  isDarkMode: boolean;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase, isDarkMode }) => {
   const { cx: bCx, cy: bCy, r: bR } = CONFIG.BIO_WELL;
   const theme = PHASE_THEMES[gamePhase as keyof typeof PHASE_THEMES] || PHASE_THEMES[1];
 
@@ -50,9 +51,13 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
 
   // Estilos dinámicos para el fondo térmico (Universo)
   const thermalBackgroundStyle = {
-    background: `radial-gradient(circle at 50% 50%, 
-      ${heatFactor > 0.4 ? `rgba(${120 + heatFactor * 135}, ${15 + heatFactor * 60}, 15, ${0.12 * heatFactor})` : 'rgba(30, 27, 75, 0.4)'} 0%, 
-      ${heatFactor > 0.7 ? `rgba(${70 + heatFactor * 80}, 2, 2, ${Math.min(0.9, 0.4 * heatFactor)})` : 'rgba(2, 6, 23, 0.98)'} 100%)`,
+    background: isDarkMode 
+      ? `radial-gradient(circle at 50% 50%, 
+          ${heatFactor > 0.4 ? `rgba(${120 + heatFactor * 135}, ${15 + heatFactor * 60}, 15, ${0.12 * heatFactor})` : 'rgba(30, 27, 75, 0.4)'} 0%, 
+          ${heatFactor > 0.7 ? `rgba(${70 + heatFactor * 80}, 2, 2, ${Math.min(0.9, 0.4 * heatFactor)})` : 'rgba(2, 6, 23, 0.98)'} 100%)`
+      : `radial-gradient(circle at 50% 50%, 
+          rgba(255, 255, 255, 0) 0%, 
+          ${heatFactor > 0.5 ? `rgba(255, 192, 203, 0.2)` : 'rgba(255, 251, 235, 0.1)'} 100%)`,
     transition: 'background 0.6s ease-out'
   };
 
@@ -63,18 +68,23 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
   const coreSaturation = 70 + (coreDensity * 30);
 
   return (
-    <div className={`canvas-container shadow-2xl border-4 border-slate-900 relative overflow-hidden rounded-[2.5rem] transition-colors duration-1000 ${theme.bg}`}>
+    <div 
+      className={`canvas-container shadow-2xl border-4 relative overflow-hidden rounded-[2.5rem] transition-colors duration-1000 ${isDarkMode ? 'border-slate-900 bg-slate-950' : 'border-amber-300 bg-amber-50'}`}
+      style={!isDarkMode ? { backgroundColor: '#fffbeb' } : {}}
+    >
       {/* Capa de Calor Dinámico (Baño Térmico) */}
-      <div 
-        className="absolute inset-0 pointer-events-none z-0"
-        style={thermalBackgroundStyle}
-      ></div>
+      {isDarkMode && (
+        <div 
+          className="absolute inset-0 pointer-events-none z-0"
+          style={thermalBackgroundStyle}
+        ></div>
+      )}
 
       {/* Efecto de resplandor de calor pulsante */}
       <div 
         className={`absolute inset-0 pointer-events-none z-0 transition-opacity duration-1000 ${heatFactor > 0.5 ? 'opacity-100' : 'opacity-0'}`}
         style={{
-          background: `radial-gradient(circle at center, rgba(251, 146, 60, ${0.08 * heatFactor}) 0%, transparent 80%)`,
+          background: `radial-gradient(circle at center, rgba(251, 146, 60, ${isDarkMode ? 0.08 : 0.12} * ${heatFactor}) 0%, transparent 80%)`,
           animation: isLatePhase ? 'pulse 2s infinite ease-in-out' : 'pulse 4s infinite ease-in-out'
         }}
       ></div>
@@ -88,10 +98,12 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
           width: `${bR * 2}%`,
           height: `${bR * 2}%`,
           transform: 'translate(-50%, -50%)',
-          borderColor: theme.border || `hsla(${coreHue}, ${coreSaturation}%, 60%, 0.8)`,
-          boxShadow: `0 0 ${20 + coreDensity * 40}px hsla(${coreHue}, 100%, 50%, ${0.2 * coreDensity})`,
-          background: theme.cell,
-          backdropFilter: `blur(${1 + coreDensity}px)`
+          borderColor: isDarkMode ? (theme.border || `hsla(${coreHue}, ${coreSaturation}%, 60%, 0.8)`) : `hsla(${coreHue}, 80%, 70%, 0.9)`,
+          boxShadow: isDarkMode 
+            ? `0 0 ${20 + coreDensity * 40}px hsla(${coreHue}, 100%, 50%, ${0.2 * coreDensity})`
+            : `0 0 ${15 + coreDensity * 30}px hsla(${coreHue}, 100%, 60%, ${0.15 * coreDensity})`,
+          background: isDarkMode ? theme.cell : 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: `blur(${2 + coreDensity}px)`
         }}
       >
         {gamePhase === GamePhase.REPRODUCTION && (
@@ -186,26 +198,30 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
           const isDisordered = p.state === 'disordered';
           
           // Lógica de color de la partícula
-          let particleBg = '#94a3b8'; // Gris por defecto (Partículas no usadas / neutras)
-          let particleBorder = '#f1f5f9';
+          let particleBg = isDarkMode ? '#94a3b8' : '#f59e0b'; // Ámbar brillante en modo claro
+          let particleBorder = isDarkMode ? '#f1f5f9' : '#ffffff';
           let shadow = 'none';
 
           if (isPattern) {
             particleBg = mutationColor!;
-            particleBorder = 'white';
-            shadow = `0 0 12px ${mutationColor}`;
+            particleBorder = isDarkMode ? 'white' : '#000000';
+            shadow = isDarkMode ? `0 0 12px ${mutationColor}` : `0 0 12px ${mutationColor}`;
           } else if (isDisordered) {
             // Partícula caótica (no usada y desordenada) -> Color térmico
-            particleBg = `rgba(${190 + heatFactor * 65}, ${110 - heatFactor * 90}, ${40}, 0.95)`;
-            particleBorder = 'rgba(255,255,255,0.4)';
+            particleBg = isDarkMode 
+              ? `rgba(190, 110, 40, 0.95)`
+              : `rgba(255, 0, 100, 1)`; // Rosa neón puro
+            particleBorder = isDarkMode ? 'rgba(255,255,255,0.4)' : '#ffffff';
           } else {
-            // Partícula "ordenada" pero no usada (Gris frío)
-            particleBg = '#475569';
-            particleBorder = '#cbd5e1';
+            // Partícula "ordenada" pero no usada
+            particleBg = isDarkMode ? '#475569' : '#fbbf24'; // Amarillo brillante
+            particleBorder = isDarkMode ? '#cbd5e1' : '#ffffff';
           }
           
           const isPhase5 = gamePhase === GamePhase.SPECIALIZATION;
-          const size = isPhase5 ? 'w-1.5 h-1.5' : 'w-2 h-2';
+          const size = isDarkMode 
+            ? (isPhase5 ? 'w-1.5 h-1.5' : 'w-2 h-2') 
+            : (isPhase5 ? 'w-2.5 h-2.5' : 'w-3 h-3');
           
           return (
             <div
@@ -213,11 +229,11 @@ const GameBoard: React.FC<GameBoardProps> = ({ particles, patterns, gamePhase })
               className={`absolute rounded-full transition-all duration-500 ease-out border
                 ${p.state === 'ordered' 
                   ? `${size} z-30 border-2` 
-                  : `${size} z-20 shadow-[0_0_4px_rgba(0,0,0,0.5)]`}`}
+                  : `${size} z-20 shadow-[0_0_4px_rgba(0,0,0,0.3)]`}`}
               style={{
                 left: `${p.x}%`,
                 top: `${p.y}%`,
-                transform: `translate(-50%, -50%) scale(${p.state === 'ordered' ? 1.15 : 1})`,
+                transform: `translate(-50%, -50%) scale(${p.state === 'ordered' ? 1.2 : 1})`,
                 backgroundColor: particleBg,
                 borderColor: particleBorder,
                 boxShadow: shadow,

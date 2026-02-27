@@ -47,22 +47,22 @@ const Sidebar: React.FC<SidebarProps> = ({ state, onOpenDocs }) => {
           </div>
 
           {state.gamePhase >= GamePhase.PERSISTENT_PATTERNS && (
-            <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl shadow-xl space-y-2 md:space-y-3 ${state.isDarkMode ? 'bg-slate-800' : 'bg-slate-900 text-white'}`}>
-              <p className={`text-[8px] md:text-[10px] font-bold uppercase mb-0.5 md:mb-1 ${state.isDarkMode ? 'text-indigo-400' : 'text-indigo-300'}`}>{t.dissipationEngines}</p>
+            <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl shadow-xl space-y-2 md:space-y-3 transition-colors ${state.isDarkMode ? 'bg-slate-800 text-white' : 'bg-white border border-amber-100 text-amber-950'}`}>
+              <p className={`text-[8px] md:text-[10px] font-bold uppercase mb-0.5 md:mb-1 ${state.isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>{t.dissipationEngines}</p>
               
               {state.gamePhase < GamePhase.SPECIALIZATION ? (
                 <>
-                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-white/10'}`}>
+                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-amber-50'}`}>
                     <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-amber-500 rounded-sm"></div> {t.triangles}</span>
-                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{triCount}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-amber-900'}`}>{triCount}</span>
                   </div>
-                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-white/10'}`}>
+                  <div className={`flex justify-between items-center text-[10px] md:text-xs border-b pb-1 md:pb-2 ${state.isDarkMode ? 'border-slate-700' : 'border-amber-50'}`}>
                     <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-500 rounded-sm"></div> {t.squares}</span>
-                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{sqrCount}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-amber-900'}`}>{sqrCount}</span>
                   </div>
                   <div className="flex justify-between items-center text-[10px] md:text-xs">
                     <span className="flex items-center gap-1 md:gap-2"><div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-500 rounded-sm"></div> {t.pentagons}</span>
-                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-white'}`}>{pntCount}</span>
+                    <span className={`font-black ${state.isDarkMode ? 'text-slate-200' : 'text-amber-900'}`}>{pntCount}</span>
                   </div>
                 </>
               ) : (

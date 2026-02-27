@@ -17,7 +17,7 @@ const Splash: React.FC<SplashProps> = ({ state, onStart, onOpenDocs, onToggleLan
   const [cycles, setCycles] = React.useState(20);
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center p-6 z-50 overflow-y-auto transition-colors duration-500 ${state.isDarkMode ? 'bg-slate-950' : 'bg-slate-100'}`}>
+    <div className={`fixed inset-0 flex items-center justify-center p-6 z-50 overflow-y-auto transition-colors duration-500 ${state.isDarkMode ? 'dark bg-slate-950' : 'bg-amber-50'}`}>
       <div className="absolute top-6 right-6 flex gap-3">
         <button 
           onClick={onToggleDarkMode}
@@ -40,7 +40,7 @@ const Splash: React.FC<SplashProps> = ({ state, onStart, onOpenDocs, onToggleLan
           {t.subtitle}
         </p>
         
-        <div className={`p-4 md:p-8 rounded-2xl md:rounded-3xl border mb-6 md:mb-8 transition-colors duration-500 ${state.isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
+        <div className={`p-4 md:p-8 rounded-2xl md:rounded-3xl border mb-6 md:mb-8 transition-colors duration-500 ${state.isDarkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-amber-100'}`}>
           <div className="mb-8">
             <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-4 text-center">{t.cyclesPerLevel}</p>
             <div className="flex justify-center gap-4">
@@ -62,7 +62,7 @@ const Splash: React.FC<SplashProps> = ({ state, onStart, onOpenDocs, onToggleLan
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <button 
               onClick={() => onStart('lifeless', cycles)}
-              className={`group p-4 border-2 rounded-xl text-left transition-all hover:shadow-lg flex flex-col ${state.isDarkMode ? 'bg-slate-800 border-slate-700 hover:border-slate-500' : 'bg-white border-slate-200 hover:border-slate-400'}`}
+              className={`group p-4 border-2 rounded-xl text-left transition-all hover:shadow-lg flex flex-col ${state.isDarkMode ? 'bg-slate-800 border-slate-700 hover:border-slate-500' : 'bg-white border-amber-200 hover:border-amber-400'}`}
             >
               <h3 className={`font-black text-xs md:text-sm mb-1 uppercase group-hover:text-indigo-400 ${state.isDarkMode ? 'text-slate-300' : 'text-slate-800'}`}>{t.lifelessUniverse}</h3>
               <p className="text-[10px] md:text-xs text-slate-500 leading-normal flex-1">{t.lifelessDesc}</p>

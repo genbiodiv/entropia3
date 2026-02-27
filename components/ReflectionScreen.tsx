@@ -102,7 +102,7 @@ const ReflectionScreen: React.FC<{
   };
   
   return (
-    <div className={`min-h-screen p-6 md:p-12 overflow-y-auto transition-colors duration-500 ${state.isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`min-h-screen p-6 md:p-12 overflow-y-auto transition-colors duration-500 ${state.isDarkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-amber-50 text-amber-950'}`}>
       <div className="max-w-6xl mx-auto space-y-12">
         <header className="text-center">
           <h1 className={`text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter ${state.isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{t.balanceTitle}</h1>
@@ -140,7 +140,7 @@ const ReflectionScreen: React.FC<{
             </div>
           </div>
 
-          <div className="bg-slate-900 text-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl flex flex-col justify-center border border-slate-800">
+          <div className={`p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl flex flex-col justify-center border transition-colors ${state.isDarkMode ? 'bg-slate-900 text-white border-slate-800' : 'bg-white text-amber-950 border-amber-100'}`}>
             <p className="text-xs font-black text-indigo-400 uppercase tracking-[0.2em] mb-4">{t.metricsConsolidated}</p>
             <div className="space-y-8">
                <div>
