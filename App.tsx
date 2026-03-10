@@ -560,12 +560,16 @@ const App: React.FC = () => {
         pentagonsCount: validPatterns.filter(p => p.type === 'PNT').length
       };
 
+      const orderPercent = (orderedCount / nextParticles.length) * 100;
+      const orderBonus = orderPercent > 50 ? Math.floor((orderPercent - 50) / 10) + 2 : 0;
+      const specializationBonus = prev.gamePhase === GamePhase.SPECIALIZATION ? 1 : 0;
+
       const totalEnergyGain = validPatterns.reduce((acc, p) => {
         const multiplier = CONFIG.COMPLEXITY[p.type]?.bonus || 1;
         const producerBonus = p.role === 'PRODUCER' ? 2 : 1;
         const baseBonus = isPhase4 || isPhase5 ? CONFIG.PHASE4_ENERGY_BONUS : CONFIG.PATTERN_BONUS_ENERGY;
         return acc + (baseBonus * multiplier * producerBonus);
-      }, (prev.gamePhase >= GamePhase.OPEN_SYSTEM ? CONFIG.ENERGY_PER_ROUND : 0));
+      }, (prev.gamePhase >= GamePhase.OPEN_SYSTEM ? CONFIG.ENERGY_PER_ROUND + orderBonus + specializationBonus : 0));
 
       const finalEnergyGain = prev.universeType === 'lifeless' ? 0 : totalEnergyGain;
 
@@ -833,7 +837,7 @@ const App: React.FC = () => {
                     onClick={handlePhaseTransition}
                     className="h-12 px-6 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition-all shadow-xl animate-pulse active:scale-95 text-xs flex items-center gap-2 whitespace-nowrap"
                   >
-                    {state.gamePhase === GamePhase.SPECIALIZATION ? t.finishSimulation : (state.gamePhase === GamePhase.REPRODUCTION ? t.results : t.nextPhase)}
+                    {state.gamePhase === GamePhase.SPECIALIZATION ? t.finishSimulation : t.nextPhase}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 )}
